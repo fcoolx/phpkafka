@@ -1217,13 +1217,10 @@ int kafka_consume(rd_kafka_t *r, zval* return_value, char* topic, char* offset, 
         {
             if ((int) rkmessage_return->len > 0)
             {
-                //ensure there is a payload
-                char payload[(int) rkmessage_return->len];
-                sprintf(payload, "%.*s", (int) rkmessage_return->len, (char *) rkmessage_return->payload);
                 add_index_stringl(
                     return_value,
                     (int) rkmessage_return->offset,
-                    payload,
+                    (char *) rkmessage_return->payload,
                     (int) rkmessage_return->len,
                     1
                 );
