@@ -768,11 +768,10 @@ void queue_consume(rd_kafka_message_t *message, void *opaque)
         params->read_count -= 1;
     //add message to return value (perhaps add as array -> offset + msg?
     if (message->len > 0) {
-        add_index_stringl(
+        add_next_index_stringl(
             return_value,
-            (int) rkmessage_return->offset,
-            (char *) rkmessage_return->payload,
-            (int) rkmessage_return->len,
+            (char *) message->payload,
+            (int) message->len,
             1
         );
     } else {
