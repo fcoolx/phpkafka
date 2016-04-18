@@ -768,11 +768,12 @@ void queue_consume(rd_kafka_message_t *message, void *opaque)
         params->read_count -= 1;
     //add message to return value (perhaps add as array -> offset + msg?
     if (message->len > 0) {
-        //ensure there is a payload
-        char payload[(int) message->len];
-        sprintf(payload, "%.*s", (int) message->len, (char *) message->payload);
-        //add_index_string(return_value, (int) message->offset, payload, 1);
-        add_next_index_string(return_value, payload, 1);
+        add_next_index_stringl(
+            return_value,
+            (char *) message->payload,
+            (int) message->len,
+            1
+        );
     } else {
         add_next_index_string(return_value, "", 1);
     }
@@ -1217,16 +1218,17 @@ int kafka_consume(rd_kafka_t *r, zval* return_value, char* topic, char* offset, 
         {
             if ((int) rkmessage_return->len > 0)
             {
-                //ensure there is a payload
-                char payload[(int) rkmessage_return->len];
-                sprintf(payload, "%.*s", (int) rkmessage_return->len, (char *) rkmessage_return->payload);
-                add_index_string(return_value, (int) rkmessage_return->offset, payload, 1);
+                add_index_stringl(
+                    return_value,
+                    (int) rkmessage_return->offset,
+                    (char *) rkmessage_return->payload,
+                    (int) rkmessage_return->len,
+                    1
+                );
             }
             else
             {
-                //add empty value
-                char payload[1] = "";//empty string
-                add_index_string(return_value, (int) rkmessage_return->offset, payload, 1);
+                add_index_string(return_value, (int) rkmessage_return->offset, "", 1);
             }
         }
         /* Return message to rdkafka */
