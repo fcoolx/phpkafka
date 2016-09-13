@@ -457,11 +457,11 @@ int kafka_produce_report(rd_kafka_t *r, const char *topic, char *msg, int msg_le
             syslog(LOG_ERR, "Failed to produce message: %s", rd_kafka_err2str(rd_kafka_errno2err(errno)));
         }
         //handle delivery response (callback)
-        rd_kafka_poll(rk, 0);
+        rd_kafka_poll(r, 0);
         rd_kafka_topic_destroy(rkt);
         return -1;
     }
-    rd_kafka_poll(rk, 0);
+    rd_kafka_poll(r, 0);
     while(pcb.msg_count && rd_kafka_outq_len(r) > 0)
         rd_kafka_poll(r, 10);
     rd_kafka_topic_destroy(rkt);
